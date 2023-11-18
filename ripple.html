@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+
+    #ripple {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background-color: rgb(255, 8, 0);
+      transform: scale(0);
+      transition: transform 0.5s, opacity 0.5s;
+    }
+  </style>
+</head>
+<body>
+  <div id="ripple"></div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const ripple = document.getElementById("ripple");
+
+      document.addEventListener("mousemove", function(event) {
+        // Update ripple position based on mouse movement
+        ripple.style.left = `${event.clientX - ripple.clientWidth / 2}px`;
+        ripple.style.top = `${event.clientY - ripple.clientHeight / 2}px`;
+
+        // Trigger pulse by updating the transform property
+        ripple.style.transform = "scale(1)";
+        ripple.style.opacity = "0.2";
+
+        // Reset transform after a short delay
+        setTimeout(() => {
+          ripple.style.transform = "scale(0)";
+          ripple.style.opacity = "0";
+        }, 500);
+      });
+    });
+  </script>
+</body>
+</html>
