@@ -1,12 +1,16 @@
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class MouseJiggler {
+public class MouseJiggler implements KeyListener {
+    private boolean exitFlag = false;
+
     public static void main(String[] args) {
-        jiggleMouse();
+        MouseJiggler mouseJiggler = new MouseJiggler();
+        mouseJiggler.jiggleMouse();
     }
 
-    public static void jiggleMouse() {
+    public void jiggleMouse() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int screenWidth = (int) screenSize.getWidth();
         int screenHeight = (int) screenSize.getHeight();
@@ -16,20 +20,24 @@ public class MouseJiggler {
         int centerX = screenWidth / 2;
         int centerY = screenHeight / 2;
 
-        System.out.println("Press 'Esc' to exit.");
+        System.out.println("Press 'M' to exit.");
 
-        while (true) {
+        // Set up key listener
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e -> {
+            if (e.getID() == KeyEvent.KEY_PRESSED) {
+                if (e.getKeyChar() == 'M') {
+                    exitFlag = true;
+                }
+            }
+            return false;
+        });
+
+        while (!exitFlag) {
             for (int angle = 0; angle < 360; angle += 10) {
                 int x = centerX + (int) (radius * Math.cos(Math.toRadians(angle)));
                 int y = centerY + (int) (radius * Math.sin(Math.toRadians(angle)));
 
                 moveMouse(x, y);
-
-                // Check if the 'Esc' key is pressed
-                if (isKeyPressed(KeyEvent.VK_ESCAPE)) {
-                    System.out.println("Exiting the program.");
-                    return;
-                }
 
                 try {
                     Thread.sleep(10); // Short sleep time for responsiveness
@@ -38,9 +46,11 @@ public class MouseJiggler {
                 }
             }
         }
+
+        System.out.println("Exiting the program.");
     }
 
-    public static void moveMouse(int x, int y) {
+    public void moveMouse(int x, int y) {
         try {
             Robot robot = new Robot();
             robot.mouseMove(x, y);
@@ -49,7 +59,18 @@ public class MouseJiggler {
         }
     }
 
-    public static boolean isKeyPressed(int keyCode) {
-        return Toolkit.getDefaultToolkit().getLockingKeyState(keyCode);
+    @Override
+    public void keyTyped(KeyEvent e) {
+        // Unused, but required for KeyListener interface
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        // Unused, but required for KeyListener interface
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        // Unused, but required for KeyListener interface
     }
 }
