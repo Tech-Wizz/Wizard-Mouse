@@ -1,13 +1,31 @@
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class start implements KeyListener {
+public class MouseJiggler extends JFrame implements KeyListener {
     private boolean exitFlag = false;
 
     public static void main(String[] args) {
-        start mouseJiggler = new start();
-        mouseJiggler.jiggleMouse();
+        SwingUtilities.invokeLater(() -> {
+            MouseJiggler mouseJiggler = new MouseJiggler();
+            mouseJiggler.setupUI();
+            mouseJiggler.jiggleMouse();
+        });
+    }
+
+    private void setupUI() {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(300, 200);
+        setLocationRelativeTo(null);
+
+        JTextArea textArea = new JTextArea("Press 'M' to exit.");
+        textArea.setEditable(false);
+        add(textArea);
+
+        addKeyListener(this);
+
+        setVisible(true);
     }
 
     public void jiggleMouse() {
@@ -15,22 +33,10 @@ public class start implements KeyListener {
         int screenWidth = (int) screenSize.getWidth();
         int screenHeight = (int) screenSize.getHeight();
 
-        int radius = 20 ;
-        double speed = 0.1; // Decreased sleep time for more responsiveness
+        int radius = 20;
+        double speed = 0.1;
         int centerX = screenWidth / 2;
         int centerY = screenHeight / 2;
-
-        System.out.println("Press 'M' to exit.");
-
-        // Set up key listener
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e -> {
-            if (e.getID() == KeyEvent.KEY_PRESSED) {
-                if (e.getKeyChar() == 'M') {
-                    exitFlag = true;
-                }
-            }
-            return false;
-        });
 
         while (!exitFlag) {
             for (int angle = 0; angle < 360; angle += 10) {
@@ -40,7 +46,7 @@ public class start implements KeyListener {
                 moveMouse(x, y);
 
                 try {
-                    Thread.sleep(9000); // Short sleep time for responsiveness
+                    Thread.sleep(9000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -48,6 +54,7 @@ public class start implements KeyListener {
         }
 
         System.out.println("Exiting the program.");
+        System.exit(0);
     }
 
     public void moveMouse(int x, int y) {
@@ -66,7 +73,9 @@ public class start implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        // Unused, but required for KeyListener interface
+        if (e.getKeyChar() == 'M') {
+            exitFlag = true;
+        }
     }
 
     @Override
