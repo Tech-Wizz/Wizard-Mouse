@@ -3,10 +3,10 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class move extends JFrame implements KeyListener {
+public class Move extends JFrame implements KeyListener {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            move move = new move();
+            Move move = new Move();
             move.setupUI();
             new Thread(move::jiggleMouse).start();
         });
@@ -18,13 +18,16 @@ public class move extends JFrame implements KeyListener {
         setLocationRelativeTo(null);
 
         // Set custom icon
-        ImageIcon icon = new ImageIcon("/image/Mouse_Wizard.png");
+        ImageIcon icon = new ImageIcon(getClass().getResource("/image/Mouse_Wizard.png"));
         setIconImage(icon.getImage());
 
         // Set image instead of text
-        ImageIcon image = new ImageIcon("/image/Mouse_Wizard.png");
+        ImageIcon image = new ImageIcon(getClass().getResource("/image/Mouse_Wizard.png"));
         JLabel imageLabel = new JLabel(image);
         add(imageLabel);
+
+        // Set title
+        setTitle("Wizard Mouse");
 
         addKeyListener(this);
 
