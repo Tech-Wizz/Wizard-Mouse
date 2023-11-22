@@ -3,10 +3,10 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-class move extends JFrame implements KeyListener {
+public class Move extends JFrame implements KeyListener {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            move move = new move();
+            Move move = new Move();
             move.setupUI();
             new Thread(move::jiggleMouse).start();
         });
@@ -17,9 +17,14 @@ class move extends JFrame implements KeyListener {
         setSize(300, 200);
         setLocationRelativeTo(null);
 
-        JTextArea textArea = new JTextArea("Press Red X button to terminate");
-        textArea.setEditable(false);
-        add(textArea);
+        // Set custom icon
+        ImageIcon icon = new ImageIcon("path/to/custom/icon.png");
+        setIconImage(icon.getImage());
+
+        // Set image instead of text
+        ImageIcon image = new ImageIcon("path/to/image.png");
+        JLabel imageLabel = new JLabel(image);
+        add(imageLabel);
 
         addKeyListener(this);
 
@@ -35,7 +40,7 @@ class move extends JFrame implements KeyListener {
         int centerX = screenWidth / 2;
         int centerY = screenHeight / 2;
 
-        while (true) { // Infinite loop without exitFlag
+        while (true) {
             for (int angle = 0; angle < 360; angle += 10) {
                 int x = centerX + (int) (radius * Math.cos(Math.toRadians(angle)));
                 int y = centerY + (int) (radius * Math.sin(Math.toRadians(angle)));
