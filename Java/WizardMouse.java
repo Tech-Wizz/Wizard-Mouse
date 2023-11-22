@@ -1,13 +1,37 @@
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class start implements KeyListener {
-    private boolean exitFlag = false;
-
+public class WizardMouse extends JFrame implements KeyListener {
     public static void main(String[] args) {
-        start mouseJiggler = new start();
-        mouseJiggler.jiggleMouse();
+        SwingUtilities.invokeLater(() -> {
+            WizardMouse move = new WizardMouse();
+            move.setupUI();
+            new Thread(move::jiggleMouse).start();
+        });
+    }
+
+    private void setupUI() {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(300, 200);
+        setLocationRelativeTo(null);
+
+        // Set custom icon
+        ImageIcon icon = new ImageIcon("/image/MouseWizard.png");
+        setIconImage(icon.getImage());
+
+        // Set image instead of text
+        ImageIcon image = new ImageIcon("image/MouseWizard.png");
+        JLabel imageLabel = new JLabel(image);
+        add(imageLabel);
+
+        // Set title
+        setTitle("Wizard Mouse");
+
+        addKeyListener(this);
+
+        setVisible(true);
     }
 
     public void jiggleMouse() {
@@ -15,24 +39,11 @@ public class start implements KeyListener {
         int screenWidth = (int) screenSize.getWidth();
         int screenHeight = (int) screenSize.getHeight();
 
-        int radius = 20 ;
-        double speed = 0.1; // Decreased sleep time for more responsiveness
+        int radius = 20;
         int centerX = screenWidth / 2;
         int centerY = screenHeight / 2;
 
-        System.out.println("Press 'M' to exit.");
-
-        // Set up key listener
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e -> {
-            if (e.getID() == KeyEvent.KEY_PRESSED) {
-                if (e.getKeyChar() == 'M') {
-                    exitFlag = true;
-                }
-            }
-            return false;
-        });
-
-        while (!exitFlag) {
+        while (true) {
             for (int angle = 0; angle < 360; angle += 10) {
                 int x = centerX + (int) (radius * Math.cos(Math.toRadians(angle)));
                 int y = centerY + (int) (radius * Math.sin(Math.toRadians(angle)));
@@ -40,14 +51,12 @@ public class start implements KeyListener {
                 moveMouse(x, y);
 
                 try {
-                    Thread.sleep(9000); // Short sleep time for responsiveness
+                    Thread.sleep(9000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
         }
-
-        System.out.println("Exiting the program.");
     }
 
     public void moveMouse(int x, int y) {
@@ -66,7 +75,9 @@ public class start implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        // Unused, but required for KeyListener interface
+        if (e.getKeyChar() == 'M') {
+            System.exit(0);
+        }
     }
 
     @Override
