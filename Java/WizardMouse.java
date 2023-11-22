@@ -14,26 +14,37 @@ public class WizardMouse extends JFrame implements KeyListener {
 
     private void setupUI() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(300, 200);
+        setSize(300, 10);
         setLocationRelativeTo(null);
 
         // Set custom icon
-        ImageIcon icon = new ImageIcon(getClass().getResource("/image/MouseWizard.png"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/image/Wizard.jpg"));
         if (icon.getImage() == null) {
             System.out.println("Icon image not loaded!");
         }
         setIconImage(icon.getImage());
 
         // Set image instead of text
-        ImageIcon image = new ImageIcon(getClass().getResource("/image/MouseWizard.png"));
-        if (image.getImage() == null) {
-            System.out.println("Image not loaded!");
-        }
-        JLabel imageLabel = new JLabel(image);
-        add(imageLabel);
+        //ImageIcon image = new ImageIcon(getClass().getResource("/image/Wizard.jpg"));
+        //if (image.getImage() == null) {
+        //    System.out.println("Image not loaded!");
+        //}
+        //JLabel imageLabel = new JLabel(image);
+        //add(imageLabel);
+
+        //Sets Text
+        //JTextArea textArea = new JTextArea("Press X");
+        //textArea.setEditable(false);
+        //add(textArea);
+
 
         // Set title
-        setTitle("Wizard Mouse");
+        setTitle("Wizard Mouse");      
+        
+        //Set Max Size
+        //Dimension maxSize = new Dimension(300, 10);
+        //setMaximumSize(maxSize);
+        //setPreferredSize(maxSize);
 
         addKeyListener(this);
 
