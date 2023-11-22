@@ -4,8 +4,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 class MouseJiggler extends JFrame implements KeyListener {
-    private boolean exitFlag = false;
-
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             MouseJiggler mouseJiggler = new MouseJiggler();
@@ -34,11 +32,10 @@ class MouseJiggler extends JFrame implements KeyListener {
         int screenHeight = (int) screenSize.getHeight();
 
         int radius = 20;
-        double speed = 0.1;
         int centerX = screenWidth / 2;
         int centerY = screenHeight / 2;
 
-        while (!exitFlag) {
+        while (true) { // Infinite loop without exitFlag
             for (int angle = 0; angle < 360; angle += 10) {
                 int x = centerX + (int) (radius * Math.cos(Math.toRadians(angle)));
                 int y = centerY + (int) (radius * Math.sin(Math.toRadians(angle)));
@@ -52,9 +49,6 @@ class MouseJiggler extends JFrame implements KeyListener {
                 }
             }
         }
-
-        System.out.println("Exiting the program.");
-        System.exit(0);
     }
 
     public void moveMouse(int x, int y) {
@@ -74,7 +68,7 @@ class MouseJiggler extends JFrame implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyChar() == 'M') {
-            exitFlag = true;
+            System.exit(0);
         }
     }
 
