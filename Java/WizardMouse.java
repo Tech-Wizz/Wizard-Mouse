@@ -6,9 +6,9 @@ import java.awt.event.KeyListener;
 public class WizardMouse extends JFrame implements KeyListener {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            WizardMouse move = new WizardMouse();
-            move.setupUI();
-            new Thread(move::jiggleMouse).start();
+            WizardMouse wizardMouse = new WizardMouse();
+            wizardMouse.setupUI();
+            new Thread(wizardMouse::jiggleMouse).start();
         });
     }
 
@@ -18,11 +18,17 @@ public class WizardMouse extends JFrame implements KeyListener {
         setLocationRelativeTo(null);
 
         // Set custom icon
-        ImageIcon icon = new ImageIcon("/image/MouseWizard.png");
+        ImageIcon icon = new ImageIcon(getClass().getResource("/image/MouseWizard.png"));
+        if (icon.getImage() == null) {
+            System.out.println("Icon image not loaded!");
+        }
         setIconImage(icon.getImage());
 
         // Set image instead of text
-        ImageIcon image = new ImageIcon("image/MouseWizard.png");
+        ImageIcon image = new ImageIcon(getClass().getResource("/image/MouseWizard.png"));
+        if (image.getImage() == null) {
+            System.out.println("Image not loaded!");
+        }
         JLabel imageLabel = new JLabel(image);
         add(imageLabel);
 
