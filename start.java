@@ -3,14 +3,14 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class MouseJiggler extends JFrame implements KeyListener {
+public class start extends JFrame implements KeyListener {
     private boolean exitFlag = false;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            MouseJiggler mouseJiggler = new MouseJiggler();
-            mouseJiggler.setupUI();
-            mouseJiggler.jiggleMouse();
+            start start = new start();
+            start.setupUI();
+            start.jiggleMouse();
         });
     }
 
