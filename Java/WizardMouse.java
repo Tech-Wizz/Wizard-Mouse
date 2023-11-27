@@ -18,7 +18,7 @@ public class WizardMouse extends JFrame implements KeyListener {
         setLocationRelativeTo(null);
 
         // Set custom icon
-        ImageIcon icon = new ImageIcon(getClass().getResource("/image/Wizard.jpg"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/image/Wizard.ico"));
         if (icon.getImage() == null) {
             System.out.println("Icon image not loaded!");
         }
