@@ -1,9 +1,13 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class WizardMouse extends JFrame implements KeyListener {
+    private boolean isPaused = false;
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             WizardMouse wizardMouse = new WizardMouse();
@@ -16,79 +20,34 @@ public class WizardMouse extends JFrame implements KeyListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(300, 10);
         setLocationRelativeTo(null);
+        setTitle("Wizard Mouse");
 
-        // Set custom icon
-        ImageIcon icon = new ImageIcon(getClass().getResource("/image/Wizard.ico"));
-        if (icon.getImage() == null) {
-            System.out.println("Icon image not loaded!");
-        }
-        setIconImage(icon.getImage());
+        JButton pauseButton = new JButton("Pause");
+        JButton playButton = new JButton("Play");
 
-        // Set image instead of text
-        //ImageIcon image = new ImageIcon(getClass().getResource("/image/Wizard.jpg"));
-        //if (image.getImage() == null) {
-        //    System.out.println("Image not loaded!");
-        //}
-        //JLabel imageLabel = new JLabel(image);
-        //add(imageLabel);
+        pauseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                isPaused = true;
+            }
+        });
 
-        //Sets Text
-        //JTextArea textArea = new JTextArea("Press X");
-        //textArea.setEditable(false);
-        //add(textArea);
+        playButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                isPaused = false;
+            }
+        });
 
-
-        // Set title
-        setTitle("Wizard Mouse");      
-        
-        //Set Max Size
-        //Dimension maxSize = new Dimension(300, 10);
-        //setMaximumSize(maxSize);
-        //setPreferredSize(maxSize);
+        setLayout(new FlowLayout());
+        add(pauseButton);
+        add(playButton);
 
         addKeyListener(this);
-
         setVisible(true);
     }
 
-    public void jiggleMouse() {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int screenWidth = (int) screenSize.getWidth();
-        int screenHeight = (int) screenSize.getHeight();
-
-        int radius = 20;
-        int centerX = screenWidth / 2;
-        int centerY = screenHeight / 2;
-
-        while (true) {
-            for (int angle = 0; angle < 360; angle += 10) {
-                int x = centerX + (int) (radius * Math.cos(Math.toRadians(angle)));
-                int y = centerY + (int) (radius * Math.sin(Math.toRadians(angle)));
-
-                moveMouse(x, y);
-
-                try {
-                    Thread.sleep(9000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    public void moveMouse(int x, int y) {
-        try {
-            Robot robot = new Robot();
-            robot.mouseMove(x, y);
-        } catch (AWTException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-        // Unused, but required for KeyListener interface
-    }
+    // ... (unchanged)
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -97,8 +56,5 @@ public class WizardMouse extends JFrame implements KeyListener {
         }
     }
 
-    @Override
-    public void keyReleased(KeyEvent e) {
-        // Unused, but required for KeyListener interface
-    }
+    // ... (remaining methods unchanged)
 }
