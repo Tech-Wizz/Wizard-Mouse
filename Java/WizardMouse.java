@@ -6,7 +6,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class WizardMouse extends JFrame implements KeyListener {
-    private boolean isPaused = true; // Initially paused
+    private volatile boolean isPaused = true; // Initially paused
+    private final Object lock = new Object(); // Synchronization object
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -56,7 +57,17 @@ public class WizardMouse extends JFrame implements KeyListener {
         int centerX = screenWidth / 2;
         int centerY = screenHeight / 2;
 
-        while (!isPaused) {
+        while (true) {
+            synchronized (lock) {
+                if (isPaused) {
+                    try {
+                        lock.wait(); // Wait until play is pressed
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
             for (int angle = 0; angle < 360; angle += 10) {
                 int x = centerX + (int) (radius * Math.cos(Math.toRadians(angle)));
                 int y = centerY + (int) (radius * Math.sin(Math.toRadians(angle)));
