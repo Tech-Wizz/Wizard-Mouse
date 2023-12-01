@@ -1,53 +1,63 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class WizardMouse extends JFrame implements KeyListener {
+    private volatile boolean isPaused = true; // Initially paused
+    private final Object lock = new Object(); // Synchronization object
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             WizardMouse wizardMouse = new WizardMouse();
             wizardMouse.setupUI();
-            new Thread(wizardMouse::jiggleMouse).start();
         });
     }
 
     private void setupUI() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(300, 10);
+        setSize(300, 80);
         setLocationRelativeTo(null);
+        setTitle("Wizard Mouse");
+
+         // Set title
+         setTitle("Wizard Mouse");      
 
         // Set custom icon
-        ImageIcon icon = new ImageIcon(getClass().getResource("/image/Wizard.ico"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/image/Wizard.jpg"));
         if (icon.getImage() == null) {
             System.out.println("Icon image not loaded!");
         }
         setIconImage(icon.getImage());
 
-        // Set image instead of text
-        //ImageIcon image = new ImageIcon(getClass().getResource("/image/Wizard.jpg"));
-        //if (image.getImage() == null) {
-        //    System.out.println("Image not loaded!");
-        //}
-        //JLabel imageLabel = new JLabel(image);
-        //add(imageLabel);
+        //sets buttons
+        JButton pauseButton = new JButton("Pause");
+        JButton playButton = new JButton("Play");
 
-        //Sets Text
-        //JTextArea textArea = new JTextArea("Press X");
-        //textArea.setEditable(false);
-        //add(textArea);
+        pauseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Pause Button Pressed");
+                isPaused = true;
+            }
+        });
 
+        playButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                isPaused = false;
+                System.out.println("Play Button Pressed");
+                new Thread(() -> jiggleMouse()).start(); // Start mouse movement in a new thread
+            }
+        });
 
-        // Set title
-        setTitle("Wizard Mouse");      
-        
-        //Set Max Size
-        //Dimension maxSize = new Dimension(300, 10);
-        //setMaximumSize(maxSize);
-        //setPreferredSize(maxSize);
+        setLayout(new FlowLayout());
+        add(pauseButton);
+        add(playButton);
 
         addKeyListener(this);
-
         setVisible(true);
     }
 
@@ -60,26 +70,27 @@ public class WizardMouse extends JFrame implements KeyListener {
         int centerX = screenWidth / 2;
         int centerY = screenHeight / 2;
 
-        while (true) {
-            for (int angle = 0; angle < 360; angle += 10) {
-                int x = centerX + (int) (radius * Math.cos(Math.toRadians(angle)));
-                int y = centerY + (int) (radius * Math.sin(Math.toRadians(angle)));
+            
 
-                moveMouse(x, y);
+        for (int angle = 0; angle < 360 && isPaused == false; angle += 10) {
+            int x = centerX + (int) (radius * Math.cos(Math.toRadians(angle)));
+            int y = centerY + (int) (radius * Math.sin(Math.toRadians(angle)));
 
-                try {
-                    Thread.sleep(9000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            moveMouse(x, y);
+
+            try {
+                Thread.sleep(9000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        }
+            }
     }
 
     public void moveMouse(int x, int y) {
         try {
             Robot robot = new Robot();
             robot.mouseMove(x, y);
+            System.out.println("Moved");
         } catch (AWTException e) {
             e.printStackTrace();
         }
