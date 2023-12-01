@@ -6,13 +6,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class WizardMouse extends JFrame implements KeyListener {
-    private boolean isPaused = false;
+    private boolean isPaused = true; // Initially paused
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             WizardMouse wizardMouse = new WizardMouse();
             wizardMouse.setupUI();
-            new Thread(wizardMouse::jiggleMouse).start();
         });
     }
 
@@ -36,6 +35,7 @@ public class WizardMouse extends JFrame implements KeyListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 isPaused = false;
+                new Thread(() -> jiggleMouse()).start(); // Start mouse movement in a new thread
             }
         });
 
@@ -56,7 +56,7 @@ public class WizardMouse extends JFrame implements KeyListener {
         int centerX = screenWidth / 2;
         int centerY = screenHeight / 2;
 
-        while (true) {
+        while (!isPaused) {
             for (int angle = 0; angle < 360; angle += 10) {
                 int x = centerX + (int) (radius * Math.cos(Math.toRadians(angle)));
                 int y = centerY + (int) (radius * Math.sin(Math.toRadians(angle)));
