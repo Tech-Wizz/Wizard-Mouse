@@ -22,6 +22,17 @@ public class WizardMouse extends JFrame implements KeyListener {
         setLocationRelativeTo(null);
         setTitle("Wizard Mouse");
 
+         // Set title
+         setTitle("Wizard Mouse");      
+
+        // Set custom icon
+        ImageIcon icon = new ImageIcon(getClass().getResource("/image/Wizard.jpg"));
+        if (icon.getImage() == null) {
+            System.out.println("Icon image not loaded!");
+        }
+        setIconImage(icon.getImage());
+
+        //sets buttons
         JButton pauseButton = new JButton("Pause");
         JButton playButton = new JButton("Play");
 
@@ -79,7 +90,7 @@ public class WizardMouse extends JFrame implements KeyListener {
         try {
             Robot robot = new Robot();
             robot.mouseMove(x, y);
-            System.out.println("Mouse");
+            System.out.println("Moved");
         } catch (AWTException e) {
             e.printStackTrace();
         }
