@@ -28,6 +28,7 @@ public class WizardMouse extends JFrame implements KeyListener {
         pauseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println("Pause Button Pressed");
                 isPaused = true;
             }
         });
@@ -36,6 +37,7 @@ public class WizardMouse extends JFrame implements KeyListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 isPaused = false;
+                System.out.println("Play Button Pressed");
                 new Thread(() -> jiggleMouse()).start(); // Start mouse movement in a new thread
             }
         });
@@ -57,36 +59,27 @@ public class WizardMouse extends JFrame implements KeyListener {
         int centerX = screenWidth / 2;
         int centerY = screenHeight / 2;
 
-        while (true) {
-            synchronized (lock) {
-                if (isPaused) {
-                    try {
-                        lock.wait(); // Wait until play is pressed
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
+            
+
+        for (int angle = 0; angle < 360 && isPaused == false; angle += 10) {
+            int x = centerX + (int) (radius * Math.cos(Math.toRadians(angle)));
+            int y = centerY + (int) (radius * Math.sin(Math.toRadians(angle)));
+
+            moveMouse(x, y);
+
+            try {
+                Thread.sleep(9000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-
-            for (int angle = 0; angle < 360; angle += 10) {
-                int x = centerX + (int) (radius * Math.cos(Math.toRadians(angle)));
-                int y = centerY + (int) (radius * Math.sin(Math.toRadians(angle)));
-
-                moveMouse(x, y);
-
-                try {
-                    Thread.sleep(9000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
             }
-        }
     }
 
     public void moveMouse(int x, int y) {
         try {
             Robot robot = new Robot();
             robot.mouseMove(x, y);
+            System.out.println("Mouse");
         } catch (AWTException e) {
             e.printStackTrace();
         }
