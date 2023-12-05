@@ -66,24 +66,30 @@ public class WizardMouse extends JFrame implements KeyListener {
         int screenWidth = (int) screenSize.getWidth();
         int screenHeight = (int) screenSize.getHeight();
 
-        int radius = 20;
+        int radius = 100;
         int centerX = screenWidth / 2;
         int centerY = screenHeight / 2;
-
             
 
-        for (int angle = 0; angle < 360 && isPaused == false; angle += 10) {
-            int x = centerX + (int) (radius * Math.cos(Math.toRadians(angle)));
-            int y = centerY + (int) (radius * Math.sin(Math.toRadians(angle)));
+        while (true) {
+            for (int angle = 0; angle < 360; angle += 10) {
 
-            moveMouse(x, y);
+                if (isPaused==true) {
+                    System.out.println("continue");
+                    break;
+                  }
+                int x = centerX + (int) (radius * Math.cos(Math.toRadians(angle)));
+                int y = centerY + (int) (radius * Math.sin(Math.toRadians(angle)));
 
-            try {
-                Thread.sleep(9000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                moveMouse(x, y);
+
+                try {
+                    Thread.sleep(9000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-            }
+        }
     }
 
     public void moveMouse(int x, int y) {
@@ -91,6 +97,7 @@ public class WizardMouse extends JFrame implements KeyListener {
             Robot robot = new Robot();
             robot.mouseMove(x, y);
             System.out.println("Moved");
+            System.out.println(isPaused);
         } catch (AWTException e) {
             e.printStackTrace();
         }
