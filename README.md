@@ -1,4 +1,4 @@
-# Mouse-Jiggler
+# Wizard-Mouse
 
 This program is made to constantly move you mouse when you are away. 
 
