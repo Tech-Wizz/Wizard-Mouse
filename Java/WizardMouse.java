@@ -38,6 +38,7 @@ public class WizardMouse extends JFrame implements KeyListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Pause Button Pressed");
+                mouseThread.interrupt();
                 isPaused = true;
             }
         });
@@ -83,7 +84,7 @@ public class WizardMouse extends JFrame implements KeyListener {
                     Thread.sleep(9000);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt(); // Preserve interrupt status
-                    System.out.println("Thread interrupted");
+                    //System.out.println("Thread interrupted");
                     return; // Exit the method if interrupted
                 }
             }
@@ -95,7 +96,6 @@ public class WizardMouse extends JFrame implements KeyListener {
             Robot robot = new Robot();
             robot.mouseMove(x, y);
             System.out.println("Moved");
-            System.out.println(isPaused);
         } catch (AWTException e) {
             e.printStackTrace();
         }
