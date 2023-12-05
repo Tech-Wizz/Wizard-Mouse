@@ -66,14 +66,15 @@ public class WizardMouse extends JFrame implements KeyListener {
     }
 
     public void jiggleMouse() {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int screenWidth = (int) screenSize.getWidth();
-        int screenHeight = (int) screenSize.getHeight();
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    int screenWidth = (int) screenSize.getWidth();
+    int screenHeight = (int) screenSize.getHeight();
 
-        int radius = 100;
-        int centerX = screenWidth / 2;
-        int centerY = screenHeight / 2;
+    int radius = 100;
+    int centerX = screenWidth / 2;
+    int centerY = screenHeight / 2;
 
+    try {
         while (true) {
             for (int angle = 0; angle < 360; angle += 10) {
 
@@ -96,7 +97,11 @@ public class WizardMouse extends JFrame implements KeyListener {
                 }
             }
         }
+    } finally {
+        // Clear interrupted status before exiting the method
+        Thread.interrupted();
     }
+}
 
     public void moveMouse(int x, int y) {
         try {
