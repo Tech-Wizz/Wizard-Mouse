@@ -7,6 +7,7 @@ import java.awt.event.KeyListener;
 
 public class WizardMouse extends JFrame implements KeyListener {
     private volatile boolean isPaused = true; // Initially paused
+    private Thread mouseThread; // Reference to the mouse movement thread
     private final Object lock = new Object(); // Synchronization object
 
     public static void main(String[] args) {
@@ -22,9 +23,6 @@ public class WizardMouse extends JFrame implements KeyListener {
         setLocationRelativeTo(null);
         setTitle("Wizard Mouse");
 
-         // Set title
-         setTitle("Wizard Mouse");      
-
         // Set custom icon
         ImageIcon icon = new ImageIcon(getClass().getResource("/image/Wizard.jpg"));
         if (icon.getImage() == null) {
@@ -32,7 +30,7 @@ public class WizardMouse extends JFrame implements KeyListener {
         }
         setIconImage(icon.getImage());
 
-        //sets buttons
+        // sets buttons
         JButton pauseButton = new JButton("Pause");
         JButton playButton = new JButton("Play");
 
@@ -40,6 +38,7 @@ public class WizardMouse extends JFrame implements KeyListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Pause Button Pressed");
+                mouseThread.interrupt();
                 isPaused = true;
             }
         });
@@ -49,7 +48,10 @@ public class WizardMouse extends JFrame implements KeyListener {
             public void actionPerformed(ActionEvent e) {
                 isPaused = false;
                 System.out.println("Play Button Pressed");
-                new Thread(() -> jiggleMouse()).start(); // Start mouse movement in a new thread
+                if (mouseThread == null || !mouseThread.isAlive()) {
+                    mouseThread = new Thread(() -> jiggleMouse());
+                    mouseThread.start(); // Start mouse movement in a new thread
+                }
             }
         });
 
@@ -69,15 +71,10 @@ public class WizardMouse extends JFrame implements KeyListener {
         int radius = 100;
         int centerX = screenWidth / 2;
         int centerY = screenHeight / 2;
-            
 
-        while (true) {
+        while (!isPaused) {
             for (int angle = 0; angle < 360; angle += 10) {
 
-                if (isPaused==true) {
-                    System.out.println("continue");
-                    break;
-                  }
                 int x = centerX + (int) (radius * Math.cos(Math.toRadians(angle)));
                 int y = centerY + (int) (radius * Math.sin(Math.toRadians(angle)));
 
@@ -86,7 +83,9 @@ public class WizardMouse extends JFrame implements KeyListener {
                 try {
                     Thread.sleep(9000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Thread.currentThread().interrupt(); // Preserve interrupt status
+                    //System.out.println("Thread interrupted");
+                    return; // Exit the method if interrupted
                 }
             }
         }
@@ -97,7 +96,6 @@ public class WizardMouse extends JFrame implements KeyListener {
             Robot robot = new Robot();
             robot.mouseMove(x, y);
             System.out.println("Moved");
-            System.out.println(isPaused);
         } catch (AWTException e) {
             e.printStackTrace();
         }
