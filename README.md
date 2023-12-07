@@ -2,10 +2,8 @@
 
 This program is made to constantly move you mouse when you are away. 
 
-1st step download packets in requirements.txt
+See individual folders for program type
 
-2nd Double Click jiggle.pyw (pyw runs it in the background instead of a terminal)
+Java v1 is most current version for pc's that have java installed on them
 
-3rd Hit "ESC" to exit the jiggle
-
-Extra Run ripple.html on your main screen. It will show you if your mouse is moving.
+Python runs in the background after selected
