@@ -8,7 +8,7 @@ import java.awt.event.KeyListener;
 public class WizardMouse extends JFrame implements KeyListener {
     private volatile boolean isPaused = true; // Initially paused
     private Thread mouseThread; // Reference to the mouse movement thread
-    
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             WizardMouse wizardMouse = new WizardMouse();
