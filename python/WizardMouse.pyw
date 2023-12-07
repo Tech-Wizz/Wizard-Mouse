@@ -3,7 +3,7 @@ import time
 import math
 import keyboard
 
-def jiggle_mouse():
+def WizardMouse():
     screen_width, screen_height = pyautogui.size()
     radius = 2
     speed = 0.1  # Decreased sleep time for more responsiveness
@@ -26,4 +26,4 @@ def jiggle_mouse():
             time.sleep(0.01)  # Short sleep time for responsiveness
 
 if __name__ == "__main__":
-    jiggle_mouse()
+    WizardMouse()
