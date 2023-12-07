@@ -8,7 +8,8 @@ import java.awt.event.KeyListener;
 public class WizardMouse extends JFrame implements KeyListener {
     private volatile boolean isPaused = true; // Initially paused
     private Thread mouseThread; // Reference to the mouse movement thread
-    
+    //ImageIcon icon = new ImageIcon(getClass().getResource("/image/Wizard.jpg"));
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             WizardMouse wizardMouse = new WizardMouse();
@@ -22,12 +23,7 @@ public class WizardMouse extends JFrame implements KeyListener {
         setLocationRelativeTo(null);
         setTitle("Wizard Mouse");
 
-        // Set custom icon
-        ImageIcon icon = new ImageIcon(getClass().getResource("/image/Wizard.jpg"));
-        if (icon.getImage() == null) {
-            System.out.println("Icon image not loaded!");
-        }
-        setIconImage(icon.getImage());
+        setMyIcon("/image/Wizard.jpg");
 
         // sets buttons
         JButton pauseButton = new JButton("Pause");
@@ -36,6 +32,7 @@ public class WizardMouse extends JFrame implements KeyListener {
         pauseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                setMyIcon("/image/Wizard.jpg");
                 System.out.println("Pause Button Pressed");
                 mouseThread.interrupt();
                 isPaused = true;
@@ -45,6 +42,7 @@ public class WizardMouse extends JFrame implements KeyListener {
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                setMyIcon("/image/RedWizard.jpg");
                 isPaused = false;
                 System.out.println("Play Button Pressed");
                 if (mouseThread == null || !mouseThread.isAlive()) {
@@ -60,6 +58,15 @@ public class WizardMouse extends JFrame implements KeyListener {
 
         addKeyListener(this);
         setVisible(true);
+    }
+
+    public void setMyIcon(String X){
+        // Set custom icon
+        ImageIcon icon = new ImageIcon(getClass().getResource(X));
+        if (icon.getImage() == null) {
+            System.out.println("Icon image not loaded!");
+        }
+        setIconImage(icon.getImage());
     }
 
     public void jiggleMouse() {
